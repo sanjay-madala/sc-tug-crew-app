@@ -1,0 +1,68 @@
+{
+  "lmpt1": {
+    "operation": [
+      "KNO101",
+      "KNO102",
+      "KNO103",
+      "RS34",
+      "RS SKYE",
+      "RS HUNTER",
+      "RS SUMMER",
+      "RS WINTER",
+      "RS NANONT",
+      "RS NATA",
+      "RS21",
+      "RS23",
+      "RS24",
+      "RS30",
+      "RS31",
+      "RS32",
+      "RS33",
+      "RS35",
+      "RS36",
+      "RS37",
+      "RS40",
+      "RS41",
+      "RS42"
+    ],
+    "standby": [
+      "KNO101",
+      "KNO102",
+      "KNO103",
+      "RS34",
+      "RS SKYE",
+      "RS HUNTER"
+    ]
+  },
+  "lmpt2": {
+    "operation": [
+      "KNO101",
+      "KNO102",
+      "KNO103",
+      "RS34",
+      "RS SKYE",
+      "RS HUNTER",
+      "RS SUMMER",
+      "RS WINTER",
+      "RS NANONT",
+      "RS NATA",
+      "RS23",
+      "RS24",
+      "RS31",
+      "RS32",
+      "RS36",
+      "RS37",
+      "RS40",
+      "RS41",
+      "RS42"
+    ],
+    "standby": [
+      "KNO101",
+      "KNO102",
+      "KNO103",
+      "RS34",
+      "RS SKYE",
+      "RS HUNTER"
+    ]
+  }
+}

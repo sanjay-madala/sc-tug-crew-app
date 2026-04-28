@@ -1,0 +1,53 @@
+{
+  "source": "MOD(TUGBKK) — Marine Department (กรมเจ้าท่า)",
+  "berthTypes": [
+    {
+      "code": "wharf",
+      "th": "ท่าเทียบเรือ",
+      "en": "Wharf Berth",
+      "rules": [
+        { "loa": "≤300 ft (91.44 m)", "minHp": 350, "minTugs": 2, "alt": "or 1 × 1,000 HP", "note": "Normal weather" },
+        { "loa": "301–450 ft (91.74–137.16 m)", "minHp": 1200, "minTugs": 1, "note": "Normal weather" },
+        { "loa": "451–500 ft (137.46–152.40 m)", "minHp": 1200, "minTugs": 2, "note": "Normal weather" },
+        { "loa": "501–565 ft (152.70–172.21 m)", "minHp": 2000, "minTugs": 2, "note": "Normal weather" },
+        { "loa": "566–600 ft Super Vessel", "minHp": 2000, "minTugs": 2, "note": "Voith Schneider / Water Tractor; Bollard Pull ≥ 40 t" }
+      ]
+    },
+    {
+      "code": "dolphin",
+      "th": "หลักกลางน้ำ",
+      "en": "Mid-River Dolphin",
+      "rules": [
+        { "loa": "≤450 ft (137.16 m)", "minHp": 1200, "minTugs": 2 },
+        { "loa": "451–565 ft (137.46–172.21 m)", "minHp": 1700, "minTugs": 2, "note": "Voith Schneider if turning" },
+        { "loa": "566–600 ft Super Vessel", "minHp": 2000, "minTugs": 2, "note": "Voith Schneider / Water Tractor" }
+      ]
+    },
+    {
+      "code": "buoy",
+      "th": "ทุ่นผูกเรือ",
+      "en": "Buoy Mooring",
+      "rules": [
+        { "loa": "≤300 ft (91.44 m)", "minHp": 350, "minTugs": 2, "alt": "or 1 × 1,000 HP" },
+        { "loa": "301–450 ft (106.98–137.16 m)", "minHp": 1200, "minTugs": 1 }
+      ]
+    },
+    {
+      "code": "anchor",
+      "th": "ทอดสมอ",
+      "en": "Anchorage",
+      "rules": [
+        { "loa": "≤300 ft (91.44 m)", "minHp": 350, "minTugs": 1 },
+        { "loa": "301–350 ft (91.74–106.70 m)", "minHp": 350, "minTugs": 2, "alt": "or 1 × 1,000 HP" },
+        { "loa": "351–500 ft (106.98–152.40 m)", "minHp": 1200, "minTugs": 1 },
+        { "loa": ">500 ft (no turn)", "minHp": 1200, "minTugs": 1 },
+        { "loa": ">500 ft (with turn)", "minHp": 1200, "minTugs": 2 }
+      ]
+    }
+  ],
+  "exceptions": [
+    { "code": "thruster", "en": "Bow/Stern Thruster", "th": "หัวเรือ/ท้ายเรือ Thruster", "rule": "May reduce tug count with pilot & berth-owner approval; min 1 tug required" },
+    { "code": "weather", "en": "Adverse Weather", "th": "สภาพอากาศไม่ปกติ", "rule": "Tug count adjustable at pilot & master discretion; safety first" },
+    { "code": "super", "en": "Super Vessel", "th": "เรือใหญ่พิเศษ", "rule": "Type/size/count at pilot or Pilotage Director discretion" }
+  ]
+}

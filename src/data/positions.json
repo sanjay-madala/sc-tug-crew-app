@@ -1,0 +1,28 @@
+{
+  "MTPP01": [
+    { "id": 1, "code": "MS", "th": "นายเรือ", "en": "Master" },
+    { "id": 2, "code": "C/O", "th": "ต้นเรือ", "en": "Chief Officer" },
+    { "id": 3, "code": "C/E", "th": "ต้นกล", "en": "Chief Engineer" },
+    { "id": 4, "code": "2/E", "th": "รองต้นกล", "en": "2nd Engineer" },
+    { "id": 5, "code": "3/E", "th": "นายช่างกลที่ 3", "en": "3rd Engineer" },
+    { "id": 6, "code": "BSN", "th": "สรั่งปากเรือ", "en": "Bosun" },
+    { "id": 7, "code": "DKM", "th": "สรั่งห้องเครื่อง", "en": "Deck Machinist" },
+    { "id": 8, "code": "DKM2", "th": "สรั่งห้องเครื่อง 2", "en": "Deck Machinist 2" },
+    { "id": 9, "code": "AB1", "th": "นายท้าย 1", "en": "Helmsman 1" },
+    { "id": 10, "code": "AB2", "th": "นายท้าย 2", "en": "Helmsman 2" },
+    { "id": 11, "code": "AB3", "th": "นายท้าย 3", "en": "Helmsman 3" },
+    { "id": 12, "code": "OLR1", "th": "ช่างน้ำมัน 1", "en": "Oiler 1" },
+    { "id": 13, "code": "OLR2", "th": "ช่างน้ำมัน 2", "en": "Oiler 2" }
+  ],
+  "BKKP01": [
+    { "id": 1, "code": "MS", "th": "นายเรือ", "en": "Master" },
+    { "id": 2, "code": "C/O", "th": "ต้นเรือ", "en": "Chief Officer" },
+    { "id": 3, "code": "C/E", "th": "ต้นกล", "en": "Chief Engineer" },
+    { "id": 4, "code": "2/E", "th": "รองต้นกล", "en": "2nd Engineer" },
+    { "id": 5, "code": "3/E", "th": "นายช่างกลที่ 3", "en": "3rd Engineer" },
+    { "id": 6, "code": "BSN", "th": "สรั่งปากเรือ", "en": "Bosun" },
+    { "id": 7, "code": "DKM", "th": "สรั่งห้องเครื่อง", "en": "Deck Machinist" },
+    { "id": 9, "code": "AB1", "th": "นายท้าย 1", "en": "Helmsman 1" },
+    { "id": 12, "code": "OLR1", "th": "ช่างน้ำมัน 1", "en": "Oiler 1" }
+  ]
+}

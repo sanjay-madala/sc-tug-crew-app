@@ -1,0 +1,139 @@
+{
+  "subgroups": {
+    "newLarge": [
+      "RS HUNTER",
+      "RS NANONT",
+      "RS NATA",
+      "RS SKYE",
+      "RS SUMMER",
+      "RS WINTER"
+    ],
+    "oldLarge": [
+      "RS31",
+      "RS32",
+      "RS34",
+      "RS36",
+      "RS40",
+      "RS41",
+      "RS42"
+    ],
+    "normalLarge": [
+      "RS21",
+      "RS23",
+      "RS24",
+      "RS30",
+      "RS33",
+      "RS35",
+      "RS37",
+      "RS38",
+      "KNO101",
+      "KNO102",
+      "KNO103"
+    ],
+    "pilotBoat": [
+      "SC17",
+      "SC18",
+      "SC19",
+      "SC20",
+      "KNO201"
+    ],
+    "small": [
+      "RS15",
+      "RS16",
+      "RS26",
+      "TINDY1",
+      "TINDY2",
+      "KNO301"
+    ],
+    "rope": [
+      "SC21",
+      "SC22",
+      "SC24",
+      "KNO401",
+      "KNO402"
+    ],
+    "rented": [
+      "SC23",
+      "RS14",
+      "RS18",
+      "RS27",
+      "RS23",
+      "RS30",
+      "RS33",
+      "KNO102"
+    ]
+  },
+  "loaGroups": {
+    "<100m": [],
+    "100-128m": [
+      "RS21",
+      "RS23",
+      "RS24",
+      "RS30",
+      "RS33",
+      "RS35",
+      "RS37",
+      "RS38",
+      "KNO101",
+      "KNO102",
+      "KNO103"
+    ],
+    ">128m": [
+      "RS31",
+      "RS32",
+      "RS34",
+      "RS36",
+      "RS40",
+      "RS41",
+      "RS42"
+    ]
+  },
+  "special": {
+    "fifiLng": [
+      "RS SKYE",
+      "RS HUNTER",
+      "RS34",
+      "KNO101",
+      "KNO102",
+      "KNO103"
+    ],
+    "fireCannonPttgcW": [
+      "RS SKYE",
+      "RS HUNTER",
+      "RS34",
+      "KNO101",
+      "KNO102",
+      "KNO103",
+      "RS21",
+      "RS23",
+      "RS24",
+      "RS35",
+      "RS36",
+      "RS37",
+      "RS40",
+      "RS41"
+    ],
+    "spmPrimary": [
+      "RS38"
+    ],
+    "spmSecondary": [
+      "RS31",
+      "RS32",
+      "RS34",
+      "RS36",
+      "RS37",
+      "RS40",
+      "RS41",
+      "RS42"
+    ],
+    "laemChabang": [
+      "RS23",
+      "RS24",
+      "RS30",
+      "RS33"
+    ],
+    "medco": [
+      "KNO102"
+    ]
+  }
+}

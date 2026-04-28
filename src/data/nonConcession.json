@@ -1,0 +1,42 @@
+[
+  {
+    "description": "งานรับส่งลูกเรือ / ช่าง  / Spare Part / น้ำมันหล่อลื่น / ใช้เรือแล้วแต่งาน และ ลูกค้า",
+    "tugBoat": 1,
+    "pilotBoat": 1,
+    "ropeBoat": 1,
+    "hrsIn": 2,
+    "hrsOut": null
+  },
+  {
+    "description": "งานท่า IRPC",
+    "tugBoat": "1 - 5",
+    "pilotBoat": null,
+    "ropeBoat": null,
+    "hrsIn": 8,
+    "hrsOut": 4
+  },
+  {
+    "description": "งานทุ่น SPM",
+    "tugBoat": 2,
+    "pilotBoat": null,
+    "ropeBoat": null,
+    "hrsIn": 10,
+    "hrsOut": 8
+  },
+  {
+    "description": "งานซ้อมแผนฉุกเฉิน",
+    "tugBoat": "1-2",
+    "pilotBoat": null,
+    "ropeBoat": null,
+    "hrsIn": 2,
+    "hrsOut": 2
+  },
+  {
+    "description": "อื่นๆ",
+    "tugBoat": null,
+    "pilotBoat": null,
+    "ropeBoat": null,
+    "hrsIn": null,
+    "hrsOut": null
+  }
+]

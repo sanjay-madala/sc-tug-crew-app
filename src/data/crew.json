@@ -1,0 +1,848 @@
+[
+  {
+    "crewId": 29,
+    "employeeId": "",
+    "fullName": "สุวิน สบเหมาะ",
+    "vesselId": 11,
+    "vesselName": "RS 15",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 72,
+    "employeeId": "",
+    "fullName": "ปรีชา คงพริ้ว",
+    "vesselId": 17,
+    "vesselName": "RS 21",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 171,
+    "employeeId": "",
+    "fullName": "ชุติเทพ ชูกิจเจริญผล",
+    "vesselId": 17,
+    "vesselName": "RS 21",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 73,
+    "employeeId": "8528",
+    "fullName": "อนันต์เทพ เขตสินทรัพย์",
+    "vesselId": 17,
+    "vesselName": "RS 21",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 155,
+    "employeeId": "8822",
+    "fullName": "กิตติศักดิ์ มีหมู่",
+    "vesselId": 19,
+    "vesselName": "RS 23",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 253,
+    "employeeId": "",
+    "fullName": "ตรีทเศศ เพียรพิทักษ์",
+    "vesselId": 19,
+    "vesselName": "RS 23",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 148,
+    "employeeId": "8882",
+    "fullName": "อนุสรณ์ ไทยกลาง",
+    "vesselId": 20,
+    "vesselName": "RS 24",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 216,
+    "employeeId": "8546",
+    "fullName": "ชลวิทย์ กูนแสง",
+    "vesselId": 20,
+    "vesselName": "RS 24",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 133,
+    "employeeId": "",
+    "fullName": "สุวิน สบเหมาะ",
+    "vesselId": 22,
+    "vesselName": "RS 26",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 129,
+    "employeeId": "8621",
+    "fullName": "สุขสันติ อุทัยสงค์",
+    "vesselId": 25,
+    "vesselName": "SC 11",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 130,
+    "employeeId": "8614",
+    "fullName": "สุปวิทย์ สาธุธรรม",
+    "vesselId": 25,
+    "vesselName": "SC 11",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 131,
+    "employeeId": "",
+    "fullName": "จรูญ สิทธิเดช",
+    "vesselId": 25,
+    "vesselName": "SC 11",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 127,
+    "employeeId": "",
+    "fullName": "ธีรเดช แก้วดวงดี",
+    "vesselId": 30,
+    "vesselName": "SC 17",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 128,
+    "employeeId": "",
+    "fullName": "ภูวนาถ แสงชาติ",
+    "vesselId": 30,
+    "vesselName": "SC 17",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 125,
+    "employeeId": "",
+    "fullName": "เฉลิมชาติ ช่อรักษา",
+    "vesselId": 31,
+    "vesselName": "SC 18",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 126,
+    "employeeId": "",
+    "fullName": "สุรพงษ์ ศิริวาลย์",
+    "vesselId": 31,
+    "vesselName": "SC 18",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 16,
+    "employeeId": "8577",
+    "fullName": "ธงชัย เจริญผล",
+    "vesselId": 38,
+    "vesselName": "KNO 101",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 251,
+    "employeeId": "8594",
+    "fullName": "วัชรชัย เสนา",
+    "vesselId": 38,
+    "vesselName": "KNO 101",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 137,
+    "employeeId": "8590",
+    "fullName": "วราพงษ์ สมใจ",
+    "vesselId": 38,
+    "vesselName": "KNO 101",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 36,
+    "employeeId": "",
+    "fullName": "ภาคภูมิ อินลังกา",
+    "vesselId": 38,
+    "vesselName": "KNO 101",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 21,
+    "employeeId": "8550",
+    "fullName": "ประหยัด แก้วกัลยา",
+    "vesselId": 39,
+    "vesselName": "KNO 102",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 212,
+    "employeeId": "",
+    "fullName": "นันทวัฒน์ บินพะ",
+    "vesselId": 39,
+    "vesselName": "KNO 102",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 65,
+    "employeeId": "8578",
+    "fullName": "พรเทพ เรืองศรี",
+    "vesselId": 39,
+    "vesselName": "KNO 102",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 66,
+    "employeeId": "",
+    "fullName": "เจริญวิทย์ จำปาเมือง",
+    "vesselId": 39,
+    "vesselName": "KNO 102",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 22,
+    "employeeId": "8588",
+    "fullName": "สุริยัณห์ คำภิระ",
+    "vesselId": 40,
+    "vesselName": "KNO 103",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 162,
+    "employeeId": "8591",
+    "fullName": "ไพฑูลย์ พวงดาว",
+    "vesselId": 40,
+    "vesselName": "KNO 103",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 170,
+    "employeeId": "8885",
+    "fullName": "อนิวัธ ศาสตราชัย",
+    "vesselId": 40,
+    "vesselName": "KNO 103",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 71,
+    "employeeId": "8579",
+    "fullName": "ทรงกลด เย็นสุข",
+    "vesselId": 40,
+    "vesselName": "KNO 103",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 119,
+    "employeeId": "8609",
+    "fullName": "ชัยวัฒน์ สมุทรคีรี",
+    "vesselId": 41,
+    "vesselName": "KNO 201",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 120,
+    "employeeId": "",
+    "fullName": "ตุลชัย จันทร์อ่ำ",
+    "vesselId": 41,
+    "vesselName": "KNO 201",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 214,
+    "employeeId": "",
+    "fullName": "",
+    "vesselId": 41,
+    "vesselName": "KNO 201",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 215,
+    "employeeId": "",
+    "fullName": "",
+    "vesselId": 41,
+    "vesselName": "KNO 201",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 153,
+    "employeeId": "",
+    "fullName": "ธเนศ กรคณฑี",
+    "vesselId": 1129,
+    "vesselName": "RS 30",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 158,
+    "employeeId": "8907",
+    "fullName": "ถวิล ป้องนพ",
+    "vesselId": 1129,
+    "vesselName": "RS 30",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 252,
+    "employeeId": "",
+    "fullName": "วีระพงศ์ ขันบุญ",
+    "vesselId": 1129,
+    "vesselName": "RS 30",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 259,
+    "employeeId": "8830",
+    "fullName": "พิเชษฐ์ ศรจันทร์",
+    "vesselId": 1130,
+    "vesselName": "RS 31",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 260,
+    "employeeId": "8921",
+    "fullName": "ศตวรรษ ไชยสุรินทร์",
+    "vesselId": 1130,
+    "vesselName": "RS 31",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 52,
+    "employeeId": "8589",
+    "fullName": "ถาวร คำจันทร์",
+    "vesselId": 1130,
+    "vesselName": "RS 31",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 226,
+    "employeeId": "",
+    "fullName": "ชลสิทธิ์ แก้วเอ้ย",
+    "vesselId": 1130,
+    "vesselName": "RS 31",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 218,
+    "employeeId": "8890",
+    "fullName": "ไพบูลย์ ภมร",
+    "vesselId": 1131,
+    "vesselName": "RS 32",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 174,
+    "employeeId": "8845",
+    "fullName": "ทาวัต ปัญญาเครือ",
+    "vesselId": 1131,
+    "vesselName": "RS 32",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 261,
+    "employeeId": "",
+    "fullName": "พินิจ แซ่ลี่",
+    "vesselId": 1131,
+    "vesselName": "RS 32",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 224,
+    "employeeId": "8564",
+    "fullName": "สมชัย ดงกลาง",
+    "vesselId": 1689,
+    "vesselName": "RS 33",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 263,
+    "employeeId": "8851",
+    "fullName": "จักรพันธ์ เจริญรัมย์",
+    "vesselId": 1689,
+    "vesselName": "RS 33",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 223,
+    "employeeId": "8863",
+    "fullName": "อนุพงษ์ วงค์เหมอะ",
+    "vesselId": 1690,
+    "vesselName": "RS 34",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 58,
+    "employeeId": "8908",
+    "fullName": "ประวิทย์ บุญพบ",
+    "vesselId": 1690,
+    "vesselName": "RS 34",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 186,
+    "employeeId": "",
+    "fullName": "ธวัชชัย หินอ่อน",
+    "vesselId": 1690,
+    "vesselName": "RS 34",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 109,
+    "employeeId": "8526",
+    "fullName": "ขวัญชัย ศรีปน",
+    "vesselId": 1691,
+    "vesselName": "RS 35",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 111,
+    "employeeId": "",
+    "fullName": "จิรายุ จันทร์หมื่นไวย",
+    "vesselId": 1691,
+    "vesselName": "RS 35",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 185,
+    "employeeId": "8559",
+    "fullName": "ศิริพร คงชนะ",
+    "vesselId": 1692,
+    "vesselName": "RS 36",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 176,
+    "employeeId": "",
+    "fullName": "ชนาธิป แข็งแรง",
+    "vesselId": 1692,
+    "vesselName": "RS 36",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 243,
+    "employeeId": "",
+    "fullName": "ประสิทธิ์ เมืองสว่าง",
+    "vesselId": 1692,
+    "vesselName": "RS 36",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 217,
+    "employeeId": "",
+    "fullName": "ประสงค์ มีหมู่",
+    "vesselId": 1693,
+    "vesselName": "RS 37",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 180,
+    "employeeId": "8568",
+    "fullName": "อาทิตย์ วินสา",
+    "vesselId": 1693,
+    "vesselName": "RS 37",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 181,
+    "employeeId": "",
+    "fullName": "รณกฤต ดาวเรือง",
+    "vesselId": 1693,
+    "vesselName": "RS 37",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 271,
+    "employeeId": "8920",
+    "fullName": "อลงกรณ์ พูนพะเนา",
+    "vesselId": 1694,
+    "vesselName": "RS 38",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 205,
+    "employeeId": "8859",
+    "fullName": "ทองสุข ดาหาร",
+    "vesselId": 1694,
+    "vesselName": "RS 38",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 206,
+    "employeeId": "8552",
+    "fullName": "ไพรัตน์ บุตรดา",
+    "vesselId": 1694,
+    "vesselName": "RS 38",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 207,
+    "employeeId": "8909",
+    "fullName": "เสกสิทธิ์ แซ่โซ้ง",
+    "vesselId": 1694,
+    "vesselName": "RS 38",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 270,
+    "employeeId": "",
+    "fullName": "วิชิต แก้วล้ำ",
+    "vesselId": 1696,
+    "vesselName": "RS 40",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 179,
+    "employeeId": "",
+    "fullName": "จักรพรรดิ จารณะ",
+    "vesselId": 1696,
+    "vesselName": "RS 40",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 43,
+    "employeeId": "8808",
+    "fullName": "สมพงษ์ ฉ่าสูงเนิน",
+    "vesselId": 1697,
+    "vesselName": "RS 41",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 269,
+    "employeeId": "",
+    "fullName": "ชนาธิป แข็งแรง",
+    "vesselId": 1697,
+    "vesselName": "RS 41",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 182,
+    "employeeId": "",
+    "fullName": "ธวัชชัย รัตนรัตน์",
+    "vesselId": 1697,
+    "vesselName": "RS 41",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 20,
+    "employeeId": "",
+    "fullName": "วรฉัตร โภคทรัพย์",
+    "vesselId": 1698,
+    "vesselName": "RS 42",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 268,
+    "employeeId": "",
+    "fullName": "สมพงษ์ นาคนางรอง",
+    "vesselId": 1698,
+    "vesselName": "RS 42",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 245,
+    "employeeId": "",
+    "fullName": "กัมปนาท นาควานิช",
+    "vesselId": 1698,
+    "vesselName": "RS 42",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 122,
+    "employeeId": "",
+    "fullName": "สุระชัย เมืองประดิษฐ",
+    "vesselId": 1699,
+    "vesselName": "SC 19",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 123,
+    "employeeId": "",
+    "fullName": "ภูไท พรวญเจริญ",
+    "vesselId": 1699,
+    "vesselName": "SC 19",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 124,
+    "employeeId": "",
+    "fullName": "ศิริวัฒน์ ห่วงเพชร",
+    "vesselId": 1699,
+    "vesselName": "SC 19",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 85,
+    "employeeId": "8630",
+    "fullName": "วรภพ วตินาถกุล",
+    "vesselId": 1703,
+    "vesselName": "Tindy 2",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 82,
+    "employeeId": "",
+    "fullName": "ตรีรัตน์ คคนะสุวรรณ",
+    "vesselId": 1703,
+    "vesselName": "Tindy 2",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 195,
+    "employeeId": "867",
+    "fullName": "นิยม คงสืบเสาะ",
+    "vesselId": 1704,
+    "vesselName": "RS SKYE",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 233,
+    "employeeId": "",
+    "fullName": "จิระวัฒน์ เขตกลาง",
+    "vesselId": 1704,
+    "vesselName": "RS SKYE",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 265,
+    "employeeId": "",
+    "fullName": "ศราวุฒิ ศรีนวล",
+    "vesselId": 1704,
+    "vesselName": "RS SKYE",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 190,
+    "employeeId": "8842",
+    "fullName": "วิชิต ครุฑธาลัย",
+    "vesselId": 1705,
+    "vesselName": "RS HUNTER",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 192,
+    "employeeId": "8894",
+    "fullName": "ธีรศักดิ์ ชาญรอบ",
+    "vesselId": 1705,
+    "vesselName": "RS HUNTER",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 239,
+    "employeeId": "",
+    "fullName": "ภูมิ ภูงาม",
+    "vesselId": 1705,
+    "vesselName": "RS HUNTER",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 199,
+    "employeeId": "8858",
+    "fullName": "สนธยา ชาเวียง",
+    "vesselId": 1706,
+    "vesselName": "RS SUMMER",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 267,
+    "employeeId": "",
+    "fullName": "นที สินธารารักษ์",
+    "vesselId": 1706,
+    "vesselName": "RS SUMMER",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 201,
+    "employeeId": "",
+    "fullName": "พรชัย วงษ์กุ้ย",
+    "vesselId": 1706,
+    "vesselName": "RS SUMMER",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 264,
+    "employeeId": "",
+    "fullName": "ธนากร ยอดเรือน",
+    "vesselId": 1706,
+    "vesselName": "RS SUMMER",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 248,
+    "employeeId": "8906",
+    "fullName": "เผชิญ ถ้อยคำ",
+    "vesselId": 1707,
+    "vesselName": "RS WINTER",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 266,
+    "employeeId": "",
+    "fullName": "ณรงค์ชัย เจริญเกตุ",
+    "vesselId": 1707,
+    "vesselName": "RS WINTER",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 210,
+    "employeeId": "8545",
+    "fullName": "อาทิตย์ โตอุ่นเพ็ชร",
+    "vesselId": 1707,
+    "vesselName": "RS WINTER",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 247,
+    "employeeId": "",
+    "fullName": "สุทธิพล พามาดี",
+    "vesselId": 1707,
+    "vesselName": "RS WINTER",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 219,
+    "employeeId": "",
+    "fullName": "สุรศักดิ์ เขตกลาง",
+    "vesselId": 1708,
+    "vesselName": "RS NANONT",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 220,
+    "employeeId": "",
+    "fullName": "อาทิตย์ บุญฤทธิ์",
+    "vesselId": 1708,
+    "vesselName": "RS NANONT",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 254,
+    "employeeId": "8917",
+    "fullName": "มนตรี ผันกลาง",
+    "vesselId": 1708,
+    "vesselName": "RS NANONT",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 222,
+    "employeeId": "",
+    "fullName": "ชัยพฤกษ์ ชูพุดซา",
+    "vesselId": 1708,
+    "vesselName": "RS NANONT",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  },
+  {
+    "crewId": 255,
+    "employeeId": "12717",
+    "fullName": "ตุลาการ ครองสุข",
+    "vesselId": 1709,
+    "vesselName": "RS NATA",
+    "departmentId": 1,
+    "positionCode": "MASTER"
+  },
+  {
+    "crewId": 256,
+    "employeeId": "",
+    "fullName": "ผดุงวัฒน์ มณีจันสุข",
+    "vesselId": 1709,
+    "vesselName": "RS NATA",
+    "departmentId": 2,
+    "positionCode": "C/O"
+  },
+  {
+    "crewId": 257,
+    "employeeId": "8861",
+    "fullName": "หงษ์ทอง ยองจา",
+    "vesselId": 1709,
+    "vesselName": "RS NATA",
+    "departmentId": 3,
+    "positionCode": "C/E"
+  },
+  {
+    "crewId": 258,
+    "employeeId": "",
+    "fullName": "นฤนาถ เสาว์ทอง",
+    "vesselId": 1709,
+    "vesselName": "RS NATA",
+    "departmentId": 4,
+    "positionCode": "2/E"
+  }
+]
