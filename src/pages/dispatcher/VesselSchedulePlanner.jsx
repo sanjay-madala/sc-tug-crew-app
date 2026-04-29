@@ -221,6 +221,9 @@ function ListView({ inner, outer, allocations, setEditId, unallocate, t }) {
 }
 
 function MatrixView({ schedule, allocations, tugs, t, lang }) {
+  const getOverlaps = useStore(s => s.getOverlaps)
+  const overlaps = useMemo(() => getOverlaps(), [schedule, allocations, getOverlaps])
+
   // Build set of allocated tug codes (across all movements)
   const allocatedTugSet = useMemo(() => {
     const s = new Set()
@@ -246,12 +249,19 @@ function MatrixView({ schedule, allocations, tugs, t, lang }) {
     return null
   }
 
+  function isCellOverlapping(movementId, tugCode) {
+    const movs = overlaps.byMovement[movementId]
+    return movs && movs.has(tugCode)
+  }
+
   const cellClasses = {
     main: 'bg-brand-dark text-white',
     standby: 'bg-amber-200 text-amber-900',
     pilot: 'bg-sky-200 text-sky-900',
     rope: 'bg-emerald-200 text-emerald-900',
   }
+
+  const conflictCount = Object.keys(overlaps.byTug).length
 
   if (tugCols.length === 0) {
     return (
@@ -294,10 +304,14 @@ function MatrixView({ schedule, allocations, tugs, t, lang }) {
               <td className="td sticky left-[240px] bg-white text-[11px]">{m.terminal}</td>
               {tugCols.map(tg => {
                 const c = cellContent(m, tg.code)
+                const isOverlap = c && isCellOverlapping(m.id, tg.code)
                 return (
-                  <td key={tg.code} className="td text-center p-0.5">
+                  <td key={tg.code} className={`td text-center p-0.5 ${isOverlap ? 'bg-red-50' : ''}`}>
                     {c && (
-                      <span className={`inline-flex items-center justify-center w-6 h-6 rounded font-bold ${cellClasses[c.type]}`}>
+                      <span
+                        className={`inline-flex items-center justify-center w-6 h-6 rounded font-bold ${cellClasses[c.type]} ${isOverlap ? 'ring-2 ring-red-500 ring-offset-1' : ''}`}
+                        title={isOverlap ? `⚠ Time-window conflict for ${tg.code}` : undefined}
+                      >
                         {c.label}
                       </span>
                     )}
@@ -315,6 +329,12 @@ function MatrixView({ schedule, allocations, tugs, t, lang }) {
         <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-sky-200"></span> Pilot Boat</span>
         <span className="flex items-center gap-1"><span className="w-4 h-4 rounded bg-emerald-200"></span> Rope Boat</span>
         <span className="flex items-center gap-1"><Moon size={12} className="text-indigo-500" /> Overnight</span>
+        <span className="flex items-center gap-1"><span className="w-4 h-4 rounded ring-2 ring-red-500 bg-white"></span> Overlap conflict</span>
+        {conflictCount > 0 && (
+          <span className="ml-auto text-red-600 font-semibold flex items-center gap-1">
+            <AlertTriangle size={12} /> {conflictCount} {lang === 'en' ? 'tug(s) with time conflicts' : 'เรือทัก ที่เวลาทับซ้อน'}
+          </span>
+        )}
       </div>
     </div>
   )
@@ -337,6 +357,11 @@ function UploadModal({ onLoad, onClose, t, lang }) {
               <div><b>{t('plan.upload.received')}:</b> {new Date(nextDaySchedule.receivedAt).toLocaleString()}</div>
               <div><b>{lang === 'en' ? 'Target date' : 'วันที่ปฏิบัติการ'}:</b> {nextDaySchedule.date}</div>
               <div><b>{t('plan.upload.extractedVessels')}:</b> {nextDaySchedule.movements.length}</div>
+              <div className="mt-2 pt-2 border-t border-blue-200">
+                <b>{lang === 'en' ? 'Includes pre-assigned tugs' : 'รวมการจัดสรรเรือทักล่วงหน้า'}:</b>{' '}
+                {nextDaySchedule.movements.filter(m => m.tugAssignment).length} / {nextDaySchedule.movements.length}{' '}
+                {lang === 'en' ? '(applied automatically — overlaps flagged in Matrix view)' : '(ใช้งานอัตโนมัติ — ตรวจการทับซ้อนในมุมมองเมทริกซ์)'}
+              </div>
             </div>
           </div>
 
@@ -355,6 +380,7 @@ function UploadModal({ onLoad, onClose, t, lang }) {
                   <th className="th">Time</th>
                   <th className="th">Terminal</th>
                   <th className="th">Pilot</th>
+                  <th className="th">Pre-assigned Tugs</th>
                   <th className="th">Remark</th>
                 </tr>
               </thead>
@@ -362,6 +388,7 @@ function UploadModal({ onLoad, onClose, t, lang }) {
                 {nextDaySchedule.movements.map((m, i) => {
                   const h = parseInt(String(m.scheduledTime).split(':')[0], 10)
                   const isNight = h >= 22 || h < 6
+                  const tugList = m.tugAssignment?.tugCodes?.join(', ') || '—'
                   return (
                     <tr key={m.id}>
                       <td className="td text-center text-slate-400">{i + 1}</td>
@@ -375,6 +402,7 @@ function UploadModal({ onLoad, onClose, t, lang }) {
                       </td>
                       <td className="td">{m.terminal}</td>
                       <td className="td">{m.pilot}</td>
+                      <td className="td font-mono text-[10px] text-slate-700">{tugList}</td>
                       <td className="td text-[10px] text-slate-500 max-w-[140px]">{m.remark}</td>
                     </tr>
                   )

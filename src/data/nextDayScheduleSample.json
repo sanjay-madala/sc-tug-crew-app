@@ -18,7 +18,13 @@
       "agent": "PTT Tanker Agency",
       "agentTel": "+66 38 123 4567",
       "draftF": 10.2, "draftM": 10.3, "draftA": 10.4,
-      "remark": "Normal"
+      "remark": "Normal",
+      "tugAssignment": {
+        "tugCodes": ["RS21", "RS23"],
+        "pilotBoat": "KNO201",
+        "ropeBoat": "KNO401",
+        "standbyCode": null
+      }
     },
     {
       "id": "M102",
@@ -34,7 +40,13 @@
       "agent": "Ocean Line",
       "agentTel": "+66 38 223 4567",
       "draftF": 6.9, "draftM": 7.0, "draftA": 7.1,
-      "remark": ""
+      "remark": "",
+      "tugAssignment": {
+        "tugCodes": ["RS14", "RS15"],
+        "pilotBoat": "KNO201",
+        "ropeBoat": "KNO402",
+        "standbyCode": null
+      }
     },
     {
       "id": "M103",
@@ -50,7 +62,14 @@
       "agent": "Korea Shipping",
       "agentTel": "+66 38 303 4567",
       "draftF": 7.2, "draftM": 7.3, "draftA": 7.4,
-      "remark": ""
+      "remark": "",
+      "tugAssignment": {
+        "tugCodes": ["RS21", "RS24"],
+        "pilotBoat": "SC18",
+        "ropeBoat": "KNO401",
+        "standbyCode": null,
+        "_overlap_note": "RS21 also assigned to TMN PLENITUDE 05:30 — windows clear, but tight"
+      }
     },
     {
       "id": "M104",
@@ -66,7 +85,14 @@
       "agent": "Eagle Maritime",
       "agentTel": "+66 38 404 4567",
       "draftF": 6.7, "draftM": 6.8, "draftA": 6.9,
-      "remark": ""
+      "remark": "",
+      "tugAssignment": {
+        "tugCodes": ["RS14", "RS15"],
+        "pilotBoat": "SC18",
+        "ropeBoat": "KNO401",
+        "standbyCode": null,
+        "_overlap_note": "RS14 + RS15 also serving OCEAN CHEMIST 07:00 — windows overlap if delays"
+      }
     },
     {
       "id": "M105",
@@ -82,7 +108,13 @@
       "agent": "Ginga Agency",
       "agentTel": "+66 38 505 4567",
       "draftF": 8.1, "draftM": 8.2, "draftA": 8.3,
-      "remark": ""
+      "remark": "",
+      "tugAssignment": {
+        "tugCodes": ["RS14", "RS15"],
+        "pilotBoat": "KNO201",
+        "ropeBoat": "KNO402",
+        "standbyCode": null
+      }
     },
     {
       "id": "M106",
@@ -98,7 +130,13 @@
       "agent": "Glory Shipping",
       "agentTel": "+66 38 606 4567",
       "draftF": 7.5, "draftM": 7.6, "draftA": 7.7,
-      "remark": ""
+      "remark": "",
+      "tugAssignment": {
+        "tugCodes": ["RS21", "RS24"],
+        "pilotBoat": "SC18",
+        "ropeBoat": "KNO401",
+        "standbyCode": null
+      }
     },
     {
       "id": "M107",
@@ -114,7 +152,14 @@
       "agent": "Thai Shipping",
       "agentTel": "+66 38 707 4567",
       "draftF": 8.5, "draftM": 8.6, "draftA": 8.7,
-      "remark": ""
+      "remark": "",
+      "tugAssignment": {
+        "tugCodes": ["RS21", "RS23"],
+        "pilotBoat": "KNO201",
+        "ropeBoat": "KNO402",
+        "standbyCode": null,
+        "_overlap_note": "RS21 + RS23 also at GSC 16:00 — could overlap if delays"
+      }
     },
     {
       "id": "M108",
@@ -130,7 +175,13 @@
       "agent": "Maran Tankers",
       "agentTel": "+66 38 808 4567",
       "draftF": 11.8, "draftM": 11.9, "draftA": 12.0,
-      "remark": "LNG — Z-Tech required — OVERNIGHT operation (23:00–01:30)"
+      "remark": "LNG — Z-Tech required — OVERNIGHT operation (23:00–01:30)",
+      "tugAssignment": {
+        "tugCodes": ["KNO101", "KNO102", "KNO103", "RS34", "RS23"],
+        "pilotBoat": "KNO201",
+        "ropeBoat": "KNO401",
+        "standbyCode": "RSSKY"
+      }
     }
   ]
 }

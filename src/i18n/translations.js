@@ -149,6 +149,26 @@ export const translations = {
   'bl.contactPerson': { en: 'Contact Person', th: 'ผู้ติดต่อ' },
   'bl.tel': { en: 'Tel / Mobile', th: 'เบอร์โทร' },
 
+  // Job Types — from client captain_app.html
+  'jobType.label': { en: 'Job Type', th: 'ประเภทงาน' },
+  'jobType.section': { en: 'Tug Job Type', th: 'ประเภทงานเรือ Tug' },
+  'jobType.placeholder': { en: '— Select Job Type —', th: '— เลือกประเภทงาน —' },
+  'jobType.berth_assist': { en: 'Berth Assist', th: 'ช่วยจอดเรือ' },
+  'jobType.unberth_assist': { en: 'Unberth Assist', th: 'ช่วยออกเรือ' },
+  'jobType.shifting': { en: 'Shifting', th: 'ย้ายเรือ' },
+  'jobType.escort': { en: 'Escort', th: 'คุ้มกันเรือ' },
+  'jobType.emergency': { en: 'Emergency Tow', th: 'ลากฉุกเฉิน' },
+  'jobType.anchor_assist': { en: 'Anchor Assist', th: 'ช่วยทอดสมอ' },
+  'jobType.standby': { en: 'Standby', th: 'เฝ้าระวัง' },
+  'jobType.other': { en: 'Other', th: 'อื่นๆ' },
+
+  'cap.crewAttendance': { en: 'Crew Attendance', th: 'การมาทำงาน' },
+  'cap.present': { en: 'Present', th: 'มา' },
+  'cap.absent': { en: 'Absent', th: 'ไม่มา' },
+  'cap.tugAssigned': { en: 'Tug assigned', th: 'เรือทักที่จัด' },
+  'cap.shipmentInfo': { en: 'Shipment Info', th: 'ข้อมูลงาน' },
+  'cap.plannedTime': { en: 'Planned time', th: 'เวลาตามแผน' },
+
   // Captain App
   'cap.today': { en: "Today's Jobs", th: 'งานวันนี้' },
   'cap.selectTug': { en: 'Select Your Tug', th: 'เลือกเรือทักของคุณ' },

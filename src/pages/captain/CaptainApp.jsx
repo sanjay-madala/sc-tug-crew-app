@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useStore } from '../../store/useStore'
 import { useT } from '../../i18n/useT'
 import { translations } from '../../i18n/translations'
-import { ChevronLeft, Globe, Home as HomeIcon, RotateCcw, MapPin, Camera, FileText, CheckSquare, Square, Anchor, Clock } from 'lucide-react'
+import { ChevronLeft, Globe, Home as HomeIcon, RotateCcw, MapPin, Camera, FileText, CheckSquare, Square, Anchor, Clock, Briefcase } from 'lucide-react'
 
 const STAGE_KEYS = ['stage.1', 'stage.2', 'stage.3', 'stage.4', 'stage.5', 'stage.6', 'stage.7', 'stage.8', 'stage.9', 'stage.10']
 const GPS_STAGES = [3, 4, 8, 9] // 0-indexed: Departed, Arrived, Let Go, Complete
@@ -16,6 +16,27 @@ const DEMO_GPS = [
   '12.7065° N, 101.1612° E',
   '12.7124° N, 101.1502° E',
 ]
+
+// Job Types from client captain_app.html
+const JOB_TYPES = ['berth_assist', 'unberth_assist', 'shifting', 'escort', 'emergency', 'anchor_assist', 'standby', 'other']
+
+// Compute initials from a Thai or English name (last word, first 2 chars)
+function initials(name) {
+  if (!name) return '?'
+  const trimmed = String(name).trim()
+  // For Thai (no spaces), take first 2 chars
+  if (!/\s/.test(trimmed)) return trimmed.slice(0, 2)
+  // For English, take first letter of first 2 words
+  const parts = trimmed.split(/\s+/).filter(Boolean)
+  return (parts[0]?.[0] || '') + (parts[1]?.[0] || '')
+}
+
+function getCurrentShiftLabel(lang) {
+  const h = new Date().getHours()
+  if (h >= 6 && h < 14) return lang === 'en' ? 'Morning Shift' : 'กะเช้า'
+  if (h >= 14 && h < 22) return lang === 'en' ? 'Afternoon Shift' : 'กะบ่าย'
+  return lang === 'en' ? 'Night Shift' : 'กะดึก'
+}
 
 export default function CaptainApp() {
   const navigate = useNavigate()
@@ -56,7 +77,14 @@ export default function CaptainApp() {
 
   const currentMovement = schedule.find(m => m.id === currentMovementId)
   const jobKey = currentMovementId && selectedTug ? `${currentMovementId}:${selectedTug}` : null
-  const jobStatus = jobKey ? (jobStatuses[jobKey] || { stage: -1, timestamps: {}, gps: {}, notes: {}, crewConfirmed: false, checklist: {} }) : null
+  const jobStatus = jobKey ? (jobStatuses[jobKey] || { stage: -1, timestamps: {}, gps: {}, notes: {}, crewConfirmed: false, checklist: {}, jobType: '', crewAttendance: {} }) : null
+
+  // Captain identity — derived from the MS (Master) permanent crew of the selected tug
+  const masterCrew = useMemo(() => {
+    if (!selectedTug) return null
+    const roster = getCrewForTug(selectedTug, date)
+    return roster.find(r => r.position?.code === 'MS')?.crew || null
+  }, [selectedTug, getCrewForTug, date])
 
   const openJob = (mId) => {
     setCurrentMovementId(mId)
@@ -100,21 +128,34 @@ export default function CaptainApp() {
           <span>LTE  92%</span>
         </div>
         {/* Nav */}
-        <div className="bg-brand-dark text-white px-3 pb-3 flex items-center justify-between flex-shrink-0">
+        <div className="bg-brand-dark text-white px-3 pb-3 flex items-center gap-2 flex-shrink-0">
           {view !== 'home' ? (
-            <button onClick={() => setView('home')} className="p-1 hover:bg-white/10 rounded"><ChevronLeft size={20} /></button>
-          ) : <div className="w-6" />}
-          <div className="text-center flex-1">
-            <div className="text-sm font-bold">
+            <button onClick={() => setView('home')} className="p-1 hover:bg-white/10 rounded flex-shrink-0"><ChevronLeft size={20} /></button>
+          ) : selectedTug && masterCrew ? (
+            <div className="w-9 h-9 rounded-full bg-sky-200 text-sky-900 flex items-center justify-center text-[11px] font-bold flex-shrink-0" title={masterCrew.fullName}>
+              {initials(masterCrew.fullName)}
+            </div>
+          ) : <div className="w-9 flex-shrink-0" />}
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-bold truncate">
               {view === 'home' && !selectedTug && t('cap.selectTug')}
               {view === 'home' && selectedTug && `${selectedTug}`}
               {view === 'detail' && currentMovement?.vesselName}
               {view === 'checklist' && t('cap.preDepartureCheck')}
               {view === 'summary' && t('cap.jobComplete')}
             </div>
-            {view === 'home' && selectedTug && <div className="text-[10px] text-white/60">{date} · {shift}</div>}
+            {view === 'home' && selectedTug && (
+              <div className="text-[10px] text-white/70 truncate">
+                {masterCrew ? `${masterCrew.fullName} · ` : ''}{getCurrentShiftLabel(lang)}
+              </div>
+            )}
+            {view === 'detail' && currentMovement && (
+              <div className="text-[10px] text-white/60">SHP-{date.replace(/-/g, '').slice(2)}-{currentMovement.id.slice(-4)}</div>
+            )}
           </div>
-          <div className="w-6" />
+          <div className="text-[10px] text-white/60 flex-shrink-0 px-2 py-1 bg-white/10 rounded-full">
+            {new Date().toLocaleDateString(lang === 'en' ? 'en-GB' : 'th-TH', { day: 'numeric', month: 'short' })}
+          </div>
         </div>
 
         {/* Content */}
@@ -139,8 +180,10 @@ export default function CaptainApp() {
               movement={currentMovement}
               jobStatus={jobStatus}
               selectedTug={selectedTug}
+              allocations={allocations}
               onAdvance={advance}
               onOpenChecklist={() => setView('checklist')}
+              onSetJobType={(jt) => setJobDetail(currentMovementId, selectedTug, { jobType: jt })}
               standbyReason={standbyReason}
               setStandbyReason={setStandbyReason}
               t={t}
@@ -152,10 +195,9 @@ export default function CaptainApp() {
               movement={currentMovement}
               selectedTug={selectedTug}
               date={date}
-              shift={shift}
               getCrewForTug={getCrewForTug}
-              onConfirm={(crewConfirmed, checklist) => {
-                setJobDetail(currentMovementId, selectedTug, { crewConfirmed, checklist })
+              onConfirm={(crewAttendance, checklist) => {
+                setJobDetail(currentMovementId, selectedTug, { crewAttendance, checklist, crewConfirmed: true })
                 advance(2) // Pre-Departure Check done
                 setView('detail')
               }}
@@ -247,25 +289,62 @@ function MyJobs({ myJobs, jobStatuses, selectedTug, onOpen, onChangeTug, t, lang
   )
 }
 
-function JobDetail({ movement, jobStatus, selectedTug, onAdvance, onOpenChecklist, standbyReason, setStandbyReason, t, lang }) {
+function JobDetail({ movement, jobStatus, selectedTug, allocations, onAdvance, onOpenChecklist, onSetJobType, standbyReason, setStandbyReason, t, lang }) {
   const stage = jobStatus.stage
   const nextStage = stage + 1
+  const alloc = allocations[movement.id] || {}
+  const tugListLabel = [
+    ...(alloc.tugCodes || []),
+    ...(alloc.standbyCode ? [`${alloc.standbyCode} (S)`] : []),
+  ].join(', ') || '—'
 
   return (
     <div className="p-3 space-y-3">
-      <Section title={t('cap.vesselInfo')}>
+      <Section title={t('cap.shipmentInfo')}>
+        <Row label={lang === 'en' ? 'Shipment' : 'งาน'} value={`SHP-${movement.id}`} />
+        <Row label={lang === 'en' ? 'Port / Terminal' : 'ท่าเทียบ'} value={movement.terminal} />
+        <Row
+          label={lang === 'en' ? 'Operation' : 'ปฏิบัติการ'}
+          value={
+            <span className={movement.operation === 'berth' ? 'text-brand-mid' : 'text-brand-orange'}>
+              {movement.operation === 'berth' ? `${t('common.berth')} — เข้าจอด` : `${t('common.unberth')} — ออก`}
+            </span>
+          }
+        />
         <Row label={lang === 'en' ? 'Vessel' : 'เรือ'} value={movement.vesselName} />
+        <Row label={t('cap.tugAssigned')} value={<span className="font-mono text-[11px]">{tugListLabel}</span>} />
+        <Row label={t('cap.plannedTime')} value={movement.scheduledTime} />
+      </Section>
+
+      <Section title={t('cap.vesselInfo')}>
         <Row label="IMO" value={movement.imo} />
         <Row label="LOA" value={`${movement.loa} m`} />
         <Row label="GRT" value={movement.grt?.toLocaleString?.()} />
         <Row label={lang === 'en' ? 'Flag' : 'ธง'} value={movement.flag} />
+        <Row label={t('vsp.col.pilot')} value={movement.pilot} />
       </Section>
 
-      <Section title={t('cap.assignment')}>
-        <Row label={t('vsp.col.terminal')} value={movement.terminal} />
-        <Row label={lang === 'en' ? 'Direction' : 'ทิศทาง'} value={movement.operation === 'berth' ? t('common.berth') : t('common.unberth')} />
-        <Row label={lang === 'en' ? 'Scheduled' : 'เวลา'} value={movement.scheduledTime} />
-        <Row label={t('vsp.col.pilot')} value={movement.pilot} />
+      <Section title={t('jobType.section')}>
+        <label className="text-[11px] font-semibold text-slate-600 mb-1 block">
+          {t('jobType.label')} <span className="text-[10px] text-slate-400 font-normal ml-1">{lang === 'en' ? '(เลือกประเภทงาน)' : ''}</span>
+        </label>
+        <select
+          value={jobStatus.jobType || ''}
+          onChange={(e) => onSetJobType(e.target.value)}
+          className="input"
+        >
+          <option value="">{t('jobType.placeholder')}</option>
+          {JOB_TYPES.map(jt => (
+            <option key={jt} value={jt}>
+              {t(`jobType.${jt}`)}{lang === 'en' ? ` — ${translations[`jobType.${jt}`]?.th || ''}` : ''}
+            </option>
+          ))}
+        </select>
+        {jobStatus.jobType && (
+          <div className="mt-2 flex items-center gap-1.5 text-[11px] text-brand-mid">
+            <Briefcase size={12} /> <b>{t(`jobType.${jobStatus.jobType}`)}</b>
+          </div>
+        )}
       </Section>
 
       <Section title={t('cap.statusTimeline')}>
@@ -330,31 +409,57 @@ function JobDetail({ movement, jobStatus, selectedTug, onAdvance, onOpenChecklis
   )
 }
 
-function Checklist({ movement, selectedTug, date, shift, getCrewForTug, onConfirm, t, lang }) {
-  const crew = getCrewForTug(selectedTug, date, shift).filter(p => p.assignment).slice(0, 4) // show first 4 positions
-  const [present, setPresent] = useState({}) // positionCode -> bool
+function Checklist({ movement, selectedTug, date, getCrewForTug, onConfirm, t, lang }) {
+  // New store signature: getCrewForTug(tugCode, date) returns [{ position, crew }, ...]
+  const crewRoster = getCrewForTug(selectedTug, date).filter(r => r.crew).slice(0, 4)
+  const [attendance, setAttendance] = useState({}) // positionCode -> 'present' | 'absent' | undefined
   const [checked, setChecked] = useState({ engine: false, nav: false, lines: false })
 
-  const allPresent = crew.length > 0 && crew.every(p => present[p.code])
+  const allMarked = crewRoster.length > 0 && crewRoster.every(r => attendance[r.position.code])
   const allChecked = Object.values(checked).every(Boolean)
-  const ready = allPresent && allChecked
+  const ready = allMarked && allChecked
 
   return (
     <div className="p-3 space-y-3">
-      <Section title={t('cap.crewConfirm')}>
-        {crew.length === 0 && <div className="text-xs text-slate-400">{lang === 'en' ? 'No crew assigned — dispatcher to complete Crew Assignment.' : 'ยังไม่ได้จัดคนประจำเรือ'}</div>}
-        <div className="grid grid-cols-2 gap-2">
-          {crew.map(p => (
-            <button
-              key={p.code}
-              onClick={() => setPresent(s => ({ ...s, [p.code]: !s[p.code] }))}
-              className={`p-2 rounded-lg border-2 text-left ${present[p.code] ? 'border-brand-green bg-surface-green' : 'border-slate-200 bg-white'}`}
-            >
-              <div className="text-[10px] font-bold text-brand-dark">{p.code}</div>
-              <div className="text-[10px] text-slate-500 truncate">{p.assignment?.fullName}</div>
-              <div className="text-sm mt-0.5">{present[p.code] ? '☑ Present' : '☐'}</div>
-            </button>
-          ))}
+      <Section title={t('cap.crewAttendance')}>
+        {crewRoster.length === 0 && (
+          <div className="text-xs text-slate-400">
+            {lang === 'en' ? 'No crew assigned — dispatcher to complete Crew Assignment.' : 'ยังไม่ได้จัดคนประจำเรือ'}
+          </div>
+        )}
+        <div className="space-y-1.5">
+          {crewRoster.map(({ position, crew }) => {
+            const att = attendance[position.code]
+            return (
+              <div key={position.code} className="flex items-center gap-2 p-2 bg-white border border-slate-200 rounded-lg">
+                <div className="w-9 h-9 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center text-[11px] font-bold flex-shrink-0">
+                  {initials(crew.fullName)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[12px] font-semibold truncate">{crew.fullName}</div>
+                  <div className="text-[10px] text-slate-500">{position.code} — {lang === 'en' ? position.en : position.th}</div>
+                </div>
+                <div className="flex gap-1 flex-shrink-0">
+                  <button
+                    onClick={() => setAttendance(s => ({ ...s, [position.code]: 'present' }))}
+                    className={`text-[11px] px-2.5 py-1 rounded-full font-bold border transition ${
+                      att === 'present' ? 'bg-surface-green text-brand-green border-brand-green' : 'bg-white border-slate-300 text-slate-500 hover:border-brand-green'
+                    }`}
+                  >
+                    {t('cap.present')}
+                  </button>
+                  <button
+                    onClick={() => setAttendance(s => ({ ...s, [position.code]: 'absent' }))}
+                    className={`text-[11px] px-2.5 py-1 rounded-full font-bold border transition ${
+                      att === 'absent' ? 'bg-surface-red text-brand-red border-brand-red' : 'bg-white border-slate-300 text-slate-500 hover:border-brand-red'
+                    }`}
+                  >
+                    {t('cap.absent')}
+                  </button>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </Section>
 
@@ -380,16 +485,23 @@ function Checklist({ movement, selectedTug, date, shift, getCrewForTug, onConfir
 
       <button
         disabled={!ready}
-        onClick={() => onConfirm(present, checked)}
+        onClick={() => onConfirm(attendance, checked)}
         className={`w-full btn justify-center ${ready ? 'btn-primary' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
       >
-        {ready ? t('common.confirm') : `${Object.values(present).filter(Boolean).length}/${crew.length} crew · ${Object.values(checked).filter(Boolean).length}/3 checks`}
+        {ready ? t('common.confirm') : `${Object.values(attendance).filter(Boolean).length}/${crewRoster.length} crew · ${Object.values(checked).filter(Boolean).length}/3 checks`}
       </button>
     </div>
   )
 }
 
 function Summary({ movement, jobStatus, t, lang }) {
+  const jobTypeLabel = jobStatus.jobType ? t(`jobType.${jobStatus.jobType}`) : '—'
+  const attendance = jobStatus.crewAttendance || {}
+  const total = Object.keys(attendance).length
+  const present = Object.values(attendance).filter(v => v === 'present').length
+  const startTime = jobStatus.timestamps?.[3] // Departed = stage 4 (0-indexed 3)
+  const endTime = jobStatus.timestamps?.[9] // Job Complete
+
   return (
     <div className="p-4 text-center">
       <div className="w-20 h-20 bg-surface-green rounded-full flex items-center justify-center mx-auto mb-3">
@@ -398,7 +510,36 @@ function Summary({ movement, jobStatus, t, lang }) {
       <div className="font-bold text-brand-green text-lg">{t('cap.jobComplete')}</div>
       <div className="text-xs text-slate-500 mb-4">{movement.vesselName} · {movement.terminal}</div>
 
-      <Section title={lang === 'en' ? 'Timestamps' : 'เวลา'}>
+      <Section title={lang === 'en' ? 'Job Summary' : 'สรุปงาน'}>
+        <div className="text-xs space-y-1.5 text-left">
+          <div className="flex justify-between border-b border-slate-100 pb-1">
+            <span className="text-slate-600">{lang === 'en' ? 'Shipment' : 'งาน'}</span>
+            <span className="font-semibold">SHP-{movement.id}</span>
+          </div>
+          <div className="flex justify-between border-b border-slate-100 pb-1">
+            <span className="text-slate-600">{lang === 'en' ? 'Port' : 'ท่า'}</span>
+            <span className="font-semibold">{movement.terminal}</span>
+          </div>
+          <div className="flex justify-between border-b border-slate-100 pb-1">
+            <span className="text-slate-600">{t('jobType.label')}</span>
+            <span className={`font-semibold ${jobStatus.jobType ? 'text-brand-mid' : 'text-slate-400'}`}>{jobTypeLabel}</span>
+          </div>
+          <div className="flex justify-between border-b border-slate-100 pb-1">
+            <span className="text-slate-600">{lang === 'en' ? 'Start time' : 'เวลาเริ่ม'}</span>
+            <span className="font-semibold text-brand-green font-mono">{startTime ? new Date(startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}</span>
+          </div>
+          <div className="flex justify-between border-b border-slate-100 pb-1">
+            <span className="text-slate-600">{lang === 'en' ? 'End time' : 'เวลาจบ'}</span>
+            <span className="font-semibold text-brand-red font-mono">{endTime ? new Date(endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-600">{lang === 'en' ? 'Crew present' : 'ลูกเรือ'}</span>
+            <span className="font-semibold">{present} / {total} {lang === 'en' ? '' : 'คน'}</span>
+          </div>
+        </div>
+      </Section>
+
+      <Section title={lang === 'en' ? 'All Timestamps' : 'เวลาทั้งหมด'}>
         <div className="text-xs space-y-1">
           {STAGE_KEYS.map((k, i) => {
             const ts = jobStatus.timestamps?.[i]

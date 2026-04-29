@@ -1,7 +1,7 @@
-import { useState, useMemo, Fragment } from 'react'
+import { useMemo, Fragment } from 'react'
 import { useStore } from '../../store/useStore'
 import { useT } from '../../i18n/useT'
-import { CheckCircle2 } from 'lucide-react'
+import { Activity } from 'lucide-react'
 
 const STATUS_OPTS = [
   { value: 'ready', cls: 'bg-surface-green text-brand-green border-brand-green' },
@@ -16,11 +16,6 @@ export default function TugReadinessLog() {
   const tugs = useStore(s => s.tugs)
   const readiness = useStore(s => s.readiness)
   const setTugStatus = useStore(s => s.setTugStatus)
-  const date = useStore(s => s.date)
-  const shift = useStore(s => s.shift)
-  const setShift = useStore(s => s.setShift)
-  const [savedAt, setSavedAt] = useState(null)
-  const [recorder, setRecorder] = useState('Somchai Donklaang')
 
   const groups = useMemo(() => {
     const map = {}
@@ -42,26 +37,15 @@ export default function TugReadinessLog() {
     <div className="p-6">
       <header className="mb-5 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-brand-dark">{t('tr.title')}</h1>
+          <h1 className="text-2xl font-bold text-brand-dark flex items-center gap-2">
+            <Activity size={22} /> {t('tr.title')}
+          </h1>
           <p className="text-sm text-slate-500">{t('tr.sub')}</p>
         </div>
-        <div className="flex items-center gap-3">
-          <div>
-            <div className="label">{t('common.date')}</div>
-            <input type="date" className="input w-auto" value={date} readOnly />
-          </div>
-          <div>
-            <div className="label">{t('common.shift')}</div>
-            <select className="input w-auto" value={shift} onChange={e => setShift(e.target.value)}>
-              <option value="morning">{t('shift.morning')}</option>
-              <option value="afternoon">{t('shift.afternoon')}</option>
-              <option value="night">{t('shift.night')}</option>
-            </select>
-          </div>
-          <div>
-            <div className="label">{t('common.recordedBy')}</div>
-            <input className="input w-40" value={recorder} onChange={e => setRecorder(e.target.value)} />
-          </div>
+        <div className="text-xs text-slate-500 italic">
+          {lang === 'en'
+            ? 'Live status — changes persist immediately'
+            : 'สถานะปัจจุบัน — เปลี่ยนแล้วบันทึกอัตโนมัติ'}
         </div>
       </header>
 
@@ -70,15 +54,7 @@ export default function TugReadinessLog() {
         <span className="pill bg-surface-orange text-brand-orange border border-brand-orange">{counts.maintenance} {t('status.maintenance')}</span>
         <span className="pill bg-surface-red text-brand-red border border-brand-red">{counts.unavailable} {t('status.unavailable')}</span>
         <span className="pill bg-surface-blue text-brand-mid border border-brand-mid">{counts.contracted} {t('status.contracted')}</span>
-        <button
-          onClick={() => setSavedAt(new Date().toLocaleTimeString())}
-          className="btn btn-primary ml-auto"
-        >
-          <CheckCircle2 size={14} /> {t('common.save')}
-        </button>
       </div>
-
-      {savedAt && <div className="mb-3 text-xs text-brand-green">{t('tr.saved')} — {savedAt}</div>}
 
       <div className="card overflow-hidden">
         <table className="w-full text-sm">

@@ -9,7 +9,6 @@ import lngCapable from '../data/lngCapable.json'
 import crew from '../data/crew.json'
 import positions from '../data/positions.json'
 import dailySchedule from '../data/dailySchedule.json'
-import nextDayScheduleSample from '../data/nextDayScheduleSample.json'
 import nonConcession from '../data/nonConcession.json'
 import bangkokRules from '../data/bangkokRules.json'
 
@@ -19,9 +18,28 @@ function isOvernight(timeStr) {
   return h >= 22 || h < 6
 }
 
+// Compute a movement's [start, end] window in minutes from midnight of its scheduled day.
+// Overnight movements (start ≥ 22:00) wrap into next day; we add 24*60 to end.
+function movementWindow(m) {
+  if (!m.scheduledTime) return null
+  const [hh, mm] = String(m.scheduledTime).split(':').map(n => parseInt(n, 10))
+  const startMin = hh * 60 + (mm || 0)
+  const r = m.required || {}
+  const hrs = m.operation === 'berth' ? (r.hrsIn || 2) : (r.hrsOut || 2)
+  const endMin = startMin + Math.round(Number(hrs) * 60)
+  return { startMin, endMin, isOvernight: hh >= 22 }
+}
+
+// Two windows overlap if start of one < end of the other (and vice versa).
+// Treat times as same-day for simplicity. Overnight is flagged but compared as-is.
+function windowsOverlap(a, b) {
+  if (!a || !b) return false
+  return a.startMin < b.endMin && b.startMin < a.endMin
+}
+
 // Seed initial runtime state
 function seedState() {
-  // Initial tug readiness: all Ready with no remark, for today × morning shift
+  // Initial tug readiness: all Ready
   const readiness = {}
   tugs.forEach(tg => {
     readiness[tg.code] = {
@@ -31,23 +49,13 @@ function seedState() {
     }
   })
 
-  // Seed allocations for today's movements — leave empty initially; dispatcher allocates
-  const allocations = {} // movementId -> { tugCodes: [], pilotBoat: code, ropeBoat: code, standbyCode: code }
+  const allocations = {} // movementId -> { tugCodes: [], pilotBoat, ropeBoat, standbyCode }
+  const jobStatuses = {} // `${movementId}:${tugCode}` -> { stage, timestamps, gps, jobType, ... }
 
-  // Job statuses: per allocated tug × movement, stage 0-9 (10 stages)
-  const jobStatuses = {} // `${movementId}:${tugCode}` -> { stage: 0, timestamps: {}, gps: {}, crewConfirmed: false, checklist: {}, notes: {}, photos: [] }
+  // ── Permanent crew per (tugCode, positionCode) — seeded from sample data ──
+  const permanentCrew = {} // `${tugCode}:${positionCode}` -> { employeeId, fullName, licenceDoc, since }
+  const temporaryCrew = [] // array of { date, tugCode, positionCode, employeeId, fullName, licenceDoc, reason, fromDate, toDate }
 
-  // Berth/Unberth log entries — initially empty
-  const berthLog = []
-
-  // Crew assignment: per tug × position × date × shift
-  const crewAssignments = {} // `${date}:${shift}:${tugCode}:${positionCode}` -> employeeId
-
-  // Seed crew assignments from sample data (shift D for today).
-  // Crew sample stores vesselName in formats like "KNO 101" / "RS 21" (with space).
-  // Tug master has codes like "KNO101" / "RS21" (no space) and names like "K.N.O. 101".
-  // Crew sample's positionCode field is the position name (e.g. "MASTER"); we need MTPP01 codes ("MS").
-  // We map via departmentId — which aligns with positions[].id.
   const today = dailySchedule.date
   const normalize = (s) => String(s || '').replace(/[.\s]/g, '').toUpperCase()
   crew.forEach(c => {
@@ -59,11 +67,12 @@ function seedState() {
     const posSet = positions[tug.positionSet] || positions.MTPP01
     const posEntry = posSet.find(p => p.id === c.departmentId)
     if (!posEntry) return
-    const key = `${today}:morning:${tug.code}:${posEntry.code}`
-    crewAssignments[key] = {
+    const key = `${tug.code}:${posEntry.code}`
+    permanentCrew[key] = {
       employeeId: c.employeeId,
       fullName: c.fullName,
       licenceDoc: 'e-unit://doc/' + c.employeeId,
+      since: '2024-01-01',
     }
   })
 
@@ -81,14 +90,13 @@ function seedState() {
     readiness,
     allocations,
     jobStatuses,
-    berthLog,
-    crewAssignments,
+    permanentCrew,
+    temporaryCrew,
     schedule: seededSchedule,
-    scheduleUploads: [], // history of upload events
+    scheduleUploads: [],
     date: today,
     shift: 'morning',
-    // Mobile app UI state — persisted so refresh doesn't lose session
-    captainSession: { selectedTug: null, currentMovementId: null, view: 'home', standbyReason: '' },
+    captainSession: { selectedTug: null, currentMovementId: null, view: 'home', standbyReason: '', jobType: '', crewAttendance: {} },
     crewSession: { selectedCrewId: null, currentMovementId: null, view: 'home', confirmations: {} },
   }
 }
@@ -169,19 +177,51 @@ export const useStore = create(
             }
           }),
 
-        // Berth log actions
-        addBerthLog: (entry) =>
-          set(s => ({ berthLog: [{ id: `BL${Date.now()}`, ...entry }, ...s.berthLog] })),
+        // ── Permanent crew actions ──
+        setPermanentCrew: (tugCode, positionCode, data) =>
+          set(s => ({
+            permanentCrew: {
+              ...s.permanentCrew,
+              [`${tugCode}:${positionCode}`]: { ...data, since: data.since || new Date().toISOString().slice(0, 10) },
+            },
+          })),
 
-        // Crew assignment actions
-        assignCrew: (key, data) =>
-          set(s => ({ crewAssignments: { ...s.crewAssignments, [key]: data } })),
-
-        clearCrew: (key) =>
+        clearPermanentCrew: (tugCode, positionCode) =>
           set(s => {
-            const { [key]: _, ...rest } = s.crewAssignments
-            return { crewAssignments: rest }
+            const key = `${tugCode}:${positionCode}`
+            const { [key]: _, ...rest } = s.permanentCrew
+            return { permanentCrew: rest }
           }),
+
+        // ── Temporary reassignment actions ──
+        addTemporaryCrew: (entry) =>
+          set(s => ({
+            temporaryCrew: [
+              ...s.temporaryCrew.filter(t =>
+                !(t.tugCode === entry.tugCode && t.positionCode === entry.positionCode && t.date === entry.date)
+              ),
+              { id: `T${Date.now()}`, ...entry },
+            ],
+          })),
+
+        removeTemporaryCrew: (date, tugCode, positionCode) =>
+          set(s => ({
+            temporaryCrew: s.temporaryCrew.filter(t =>
+              !(t.date === date && t.tugCode === tugCode && t.positionCode === positionCode)
+            ),
+          })),
+
+        // Resolve crew for a given (tug, position, date) — temp wins over permanent
+        getResolvedCrew: (tugCode, positionCode, date) => {
+          const { permanentCrew, temporaryCrew } = get()
+          const temp = temporaryCrew.find(t =>
+            t.tugCode === tugCode && t.positionCode === positionCode && t.date === date
+          )
+          if (temp) return { ...temp, type: 'temporary' }
+          const perm = permanentCrew[`${tugCode}:${positionCode}`]
+          if (perm) return { ...perm, type: 'permanent', tugCode, positionCode }
+          return null
+        },
 
         // Schedule edits
         updateMovement: (id, patch) =>
@@ -192,11 +232,11 @@ export const useStore = create(
         setCrewSession: (patch) => set(s => ({ crewSession: { ...s.crewSession, ...patch } })),
 
         // ============ Plan workflow ============
-        // Upload a new batch of movements from port (simulates file parse)
+        // Upload a new batch of movements from port. The file may include `tugAssignment`
+        // per movement — if so, we apply it to allocations on upload (no manual assignment needed).
         uploadScheduleBatch: (batch) => {
           const now = new Date().toISOString()
           const newMovements = batch.movements.map(m => ({
-            // Pre-compute required tug requirement (simplified — uses existing matrix heuristic)
             required: m.required || inferRequired(m, get().terminalMatrix),
             ...m,
             planStatus: 'uploaded',
@@ -205,23 +245,39 @@ export const useStore = create(
             uploadedAt: now,
             postedAt: null,
           }))
+          // Build allocations map from movements that have tugAssignment
+          const incomingAllocs = {}
+          newMovements.forEach(m => {
+            if (m.tugAssignment) {
+              incomingAllocs[m.id] = {
+                tugCodes: m.tugAssignment.tugCodes || [],
+                pilotBoat: m.tugAssignment.pilotBoat || '',
+                ropeBoat: m.tugAssignment.ropeBoat || '',
+                standbyCode: m.tugAssignment.standbyCode || '',
+              }
+            }
+          })
           set(s => ({
-            // Replace any prior movements with same IDs (re-upload idempotent)
             schedule: [...s.schedule.filter(m => !newMovements.find(n => n.id === m.id)), ...newMovements]
               .sort((a, b) => String(a.scheduledTime).localeCompare(String(b.scheduledTime))),
-            scheduleUploads: [{ at: now, filename: batch.filename, source: batch.source, count: newMovements.length }, ...s.scheduleUploads],
+            allocations: { ...s.allocations, ...incomingAllocs },
+            scheduleUploads: [{
+              at: now,
+              filename: batch.filename,
+              source: batch.source,
+              count: newMovements.length,
+              withTugAssignment: Object.keys(incomingAllocs).length,
+            }, ...s.scheduleUploads],
           }))
         },
 
-        // Fleet Confirm — validate each uploaded movement against current readiness
         runFleetConfirm: () => {
           const { schedule, readiness, tugs } = get()
           const confirmed = schedule.map(m => {
-            if (m.planStatus !== 'uploaded' && m.planStatus !== 'no-tug') return m // only confirm uploaded/retry
+            if (m.planStatus !== 'uploaded' && m.planStatus !== 'no-tug') return m
             const r = m.required || {}
             const needed = (m.operation === 'berth' ? r.tugsIn : r.tugsOut) || 0
             const sizeHint = (r.tugSize || '').toLowerCase()
-            // Count ready tugs matching size
             const readyOfSize = tugs.filter(tg => {
               const st = readiness[tg.code]?.status
               if (st !== 'ready') return false
@@ -238,7 +294,6 @@ export const useStore = create(
           set({ schedule: confirmed })
         },
 
-        // Post — publish fleet-confirmed movements so Captain/Crew apps can see them
         postSchedule: () => {
           const now = new Date().toISOString()
           set(s => ({
@@ -248,6 +303,51 @@ export const useStore = create(
                 : m
             ),
           }))
+        },
+
+        // ── Overlap detection ──
+        // Returns map: tugCode -> array of conflicting movement-id pairs
+        // Two movements conflict if same tug is allocated to both AND time windows overlap.
+        getOverlaps: () => {
+          const { schedule, allocations } = get()
+          const tugMovements = {} // tugCode -> array of { movementId, window, role }
+          schedule.forEach(m => {
+            const a = allocations[m.id]
+            if (!a) return
+            const win = movementWindow(m)
+            if (!win) return
+            const codes = [
+              ...(a.tugCodes || []).map(c => ({ code: c, role: 'main' })),
+              ...(a.standbyCode ? [{ code: a.standbyCode, role: 'standby' }] : []),
+              ...(a.pilotBoat ? [{ code: a.pilotBoat, role: 'pilot' }] : []),
+              ...(a.ropeBoat ? [{ code: a.ropeBoat, role: 'rope' }] : []),
+            ]
+            codes.forEach(({ code, role }) => {
+              if (!tugMovements[code]) tugMovements[code] = []
+              tugMovements[code].push({ movementId: m.id, vesselName: m.vesselName, window: win, role, scheduledTime: m.scheduledTime })
+            })
+          })
+          // Find overlaps
+          const overlaps = {} // tugCode -> array of conflicting movementIds (set)
+          const movementOverlaps = {} // movementId -> Set of tugCodes that overlap on this movement
+          Object.entries(tugMovements).forEach(([code, list]) => {
+            for (let i = 0; i < list.length; i++) {
+              for (let j = i + 1; j < list.length; j++) {
+                if (windowsOverlap(list[i].window, list[j].window)) {
+                  if (!overlaps[code]) overlaps[code] = []
+                  overlaps[code].push({
+                    a: list[i],
+                    b: list[j],
+                  })
+                  if (!movementOverlaps[list[i].movementId]) movementOverlaps[list[i].movementId] = new Set()
+                  if (!movementOverlaps[list[j].movementId]) movementOverlaps[list[j].movementId] = new Set()
+                  movementOverlaps[list[i].movementId].add(code)
+                  movementOverlaps[list[j].movementId].add(code)
+                }
+              }
+            }
+          })
+          return { byTug: overlaps, byMovement: movementOverlaps }
         },
 
         // Reset demo
@@ -266,30 +366,34 @@ export const useStore = create(
           })
         },
 
-        getCrewForTug: (tugCode, date, shift) => {
-          const { crewAssignments, tugs, positions } = get()
+        // Resolve full crew roster for a tug on a given date
+        getCrewForTug: (tugCode, date) => {
+          const { tugs, positions, permanentCrew, temporaryCrew } = get()
           const tug = tugs.find(t => t.code === tugCode)
           if (!tug) return []
           const ps = positions[tug.positionSet] || []
           return ps.map(p => {
-            const key = `${date}:${shift}:${tugCode}:${p.code}`
-            const assignment = crewAssignments[key]
-            return { ...p, assignment }
+            const tempEntry = temporaryCrew.find(t =>
+              t.tugCode === tugCode && t.positionCode === p.code && t.date === date
+            )
+            if (tempEntry) return { position: p, crew: { ...tempEntry, type: 'temporary' } }
+            const perm = permanentCrew[`${tugCode}:${p.code}`]
+            if (perm) return { position: p, crew: { ...perm, type: 'permanent' } }
+            return { position: p, crew: null }
           })
         },
       }),
       {
         name: 'sc-tug-demo-v2',
-        version: 5,
-        migrate: () => undefined, // on version change, drop persisted state and re-seed
-        // Only persist runtime state, not seed (seed is re-loaded from imports)
+        version: 6,
+        migrate: () => undefined,
         partialize: (s) => ({
           lang: s.lang,
           readiness: s.readiness,
           allocations: s.allocations,
           jobStatuses: s.jobStatuses,
-          berthLog: s.berthLog,
-          crewAssignments: s.crewAssignments,
+          permanentCrew: s.permanentCrew,
+          temporaryCrew: s.temporaryCrew,
           schedule: s.schedule,
           scheduleUploads: s.scheduleUploads,
           date: s.date,
@@ -302,7 +406,6 @@ export const useStore = create(
   )
 )
 
-// Infer required tugs from terminal matrix for a movement (simplified heuristic)
 function inferRequired(m, matrix) {
   const loa = Number(m.loa) || 0
   const loaFt = loa * 3.28084
@@ -330,7 +433,6 @@ function inferRequired(m, matrix) {
   }
 }
 
-// Cross-tab sync: listen for localStorage events and rehydrate
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (e) => {
     if (e.key === 'sc-tug-demo-v2' && e.newValue) {
