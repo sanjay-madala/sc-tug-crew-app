@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { Home, Calendar, ListOrdered, Activity, CalendarDays, Users, Globe, RotateCcw } from 'lucide-react'
+import { Home, Calendar, Activity, CalendarDays, Users, Globe, RotateCcw } from 'lucide-react'
 import { useStore } from '../store/useStore'
 import { useT } from '../i18n/useT'
 
@@ -13,7 +13,6 @@ export default function DispatcherLayout() {
 
   const navItems = [
     { to: 'schedule', icon: Calendar, label: t('nav.schedule') },
-    { to: 'queue', icon: ListOrdered, label: t('nav.queue') },
     { to: 'readiness', icon: Activity, label: t('nav.readiness') },
     { to: 'shift', icon: CalendarDays, label: t('nav.shift') },
     { to: 'crew', icon: Users, label: t('nav.crewAssign') },
