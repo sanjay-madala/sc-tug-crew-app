@@ -13,6 +13,7 @@ export const translations = {
 
   // Nav
   'nav.schedule': { en: 'Vessel Schedule', th: 'แผนงานเรือ' },
+  'nav.bangkok': { en: 'Bangkok Schedule', th: 'แผนงานเรือ กรุงเทพฯ' },
   'nav.queue': { en: 'Tug Queue', th: 'คิวเรือทัก' },
   'nav.readiness': { en: 'Tug Readiness', th: 'สถานะเรือทัก' },
   'nav.shift': { en: 'Shift Planner', th: 'ตารางกะ' },
@@ -97,6 +98,19 @@ export const translations = {
   'vsp.pill.vessels': { en: 'Vessels', th: 'ลำ' },
   'vsp.pill.berth': { en: 'Berth', th: 'เข้า' },
   'vsp.pill.unberth': { en: 'Unberth', th: 'ออก' },
+
+  // Bangkok Vessel Schedule Planner
+  'bvsp.title': { en: 'Bangkok Vessel Schedule Planner', th: 'แผนงานเรือ — กรุงเทพฯ' },
+  'bvsp.sub': { en: 'Manually maintained daily vessel movements for Bangkok Port', th: 'แผนการเข้า-ออกเรือประจำวันของท่าเรือกรุงเทพฯ (กรอกข้อมูลเอง)' },
+  'bvsp.add': { en: 'Add Vessel', th: 'เพิ่มเรือ' },
+  'bvsp.addFirst': { en: 'Add the first vessel', th: 'เพิ่มเรือลำแรก' },
+  'bvsp.empty': { en: 'No vessels yet. Add manually below.', th: 'ยังไม่มีเรือในตาราง คลิกเพิ่มด้านล่าง' },
+  'bvsp.modal.title': { en: 'Add Vessel — Manual Entry', th: 'เพิ่มเรือ — กรอกข้อมูลเอง' },
+  'bvsp.modal.add': { en: 'Add to Schedule', th: 'เพิ่มในตาราง' },
+  'bvsp.section.vessel': { en: 'Vessel Information', th: 'ข้อมูลเรือ' },
+  'bvsp.section.berth': { en: 'Berth & Timing', th: 'ท่าเทียบและเวลา' },
+  'bvsp.section.party': { en: 'Pilot & Agent', th: 'นำร่องและตัวแทน' },
+  'bvsp.section.draft': { en: 'Draft & Remark', th: 'กินน้ำและหมายเหตุ' },
 
   // Tug Queue
   'tq.title': { en: 'Tug Queue Planner', th: 'จัดคิวเรือทัก' },

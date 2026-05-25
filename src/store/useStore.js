@@ -11,6 +11,7 @@ import positions from '../data/positions.json'
 import dailySchedule from '../data/dailySchedule.json'
 import nonConcession from '../data/nonConcession.json'
 import bangkokRules from '../data/bangkokRules.json'
+import bangkokDummy from '../data/bangkokDummy.json'
 
 function isOvernight(timeStr) {
   if (!timeStr) return false
@@ -98,6 +99,52 @@ function seedState() {
     shift: 'morning',
     captainSession: { selectedTug: null, currentMovementId: null, view: 'home', standbyReason: '', jobType: '', crewAttendance: {} },
     crewSession: { selectedCrewId: null, currentMovementId: null, view: 'home', confirmations: {} },
+
+    // ── Bangkok port (isolated from MTP) ──
+    bangkokSchedule: [],
+    bangkokAllocations: {},
+  }
+}
+
+// Bangkok-port HP/tug rules from MOD(TUGBKK), used for manual-entry vessel requirements.
+function inferBangkokRequired(m, rules) {
+  const loa = Number(m.loa) || 0
+  const loaFt = loa * 3.28084
+  const berthType = m.berthType || 'wharf'
+  const bucket = (rules.berthTypes || []).find(b => b.code === berthType)
+  const fallback = { tugSize: 'Large', tugsIn: 2, tugsOut: 2, standby: 0, pilotBoat: 1, ropeBoat: 0, hrsIn: 2, hrsOut: 2, minHp: 1200 }
+  if (!bucket) return fallback
+
+  let chosen = null
+  for (const r of bucket.rules) {
+    const range = String(r.loa || '')
+    // pull the first two numbers in the bracket, in feet
+    const nums = range.match(/(\d+(?:\.\d+)?)/g) || []
+    if (nums.length === 0) continue
+    if (range.includes('≤') || range.startsWith('<')) {
+      if (loaFt <= Number(nums[0])) { chosen = r; break }
+    } else if (range.startsWith('>')) {
+      if (loaFt > Number(nums[0])) { chosen = r; break }
+    } else {
+      const lo = Number(nums[0])
+      const hi = Number(nums[1] ?? nums[0])
+      if (loaFt >= lo && loaFt <= hi) { chosen = r; break }
+    }
+  }
+  if (!chosen) chosen = bucket.rules[bucket.rules.length - 1]
+
+  const sizeFromHp = (chosen.minHp || 0) >= 2000 ? 'Large' : (chosen.minHp || 0) >= 1200 ? 'Middle' : 'Small'
+  return {
+    tugSize: sizeFromHp,
+    tugsIn: chosen.minTugs || 1,
+    tugsOut: chosen.minTugs || 1,
+    standby: 0,
+    pilotBoat: 1,
+    ropeBoat: 0,
+    hrsIn: 2,
+    hrsOut: 2,
+    minHp: chosen.minHp || 1200,
+    berthType,
   }
 }
 
@@ -115,6 +162,7 @@ export const useStore = create(
         positions,
         nonConcession,
         bangkokRules,
+        bangkokDummy,
 
         // User preferences
         lang: 'en',
@@ -350,6 +398,130 @@ export const useStore = create(
           return { byTug: overlaps, byMovement: movementOverlaps }
         },
 
+        // ============ Bangkok port (isolated from MTP — does not touch existing state) ============
+        addBangkokMovement: (m) => {
+          const id = m.id || `BKK-${Date.now()}`
+          const required = m.required || inferBangkokRequired(m, get().bangkokRules)
+          const movement = {
+            ...m,
+            id,
+            required,
+            planStatus: m.planStatus || 'draft',
+            fleetConfirmStatus: null,
+            isOvernight: isOvernight(m.scheduledTime),
+            createdAt: new Date().toISOString(),
+          }
+          set(s => ({
+            bangkokSchedule: [...s.bangkokSchedule, movement]
+              .sort((a, b) => String(a.scheduledTime).localeCompare(String(b.scheduledTime))),
+          }))
+        },
+
+        updateBangkokMovement: (id, patch) =>
+          set(s => ({
+            bangkokSchedule: s.bangkokSchedule.map(m => {
+              if (m.id !== id) return m
+              const merged = { ...m, ...patch }
+              const requiredChanged = patch.loa !== undefined || patch.berthType !== undefined
+              return {
+                ...merged,
+                required: requiredChanged ? inferBangkokRequired(merged, get().bangkokRules) : merged.required,
+                isOvernight: isOvernight(merged.scheduledTime),
+              }
+            }),
+          })),
+
+        removeBangkokMovement: (id) =>
+          set(s => {
+            const { [id]: _, ...restAlloc } = s.bangkokAllocations
+            return {
+              bangkokSchedule: s.bangkokSchedule.filter(m => m.id !== id),
+              bangkokAllocations: restAlloc,
+            }
+          }),
+
+        allocateBangkokTugs: (movementId, alloc) =>
+          set(s => ({ bangkokAllocations: { ...s.bangkokAllocations, [movementId]: alloc } })),
+
+        unallocateBangkok: (movementId) =>
+          set(s => {
+            const { [movementId]: _, ...rest } = s.bangkokAllocations
+            return { bangkokAllocations: rest }
+          }),
+
+        runBangkokFleetConfirm: () => {
+          const { bangkokSchedule, readiness, tugs } = get()
+          const bkkTugs = tugs.filter(t => t.site === 'BKK')
+          const confirmed = bangkokSchedule.map(m => {
+            if (m.planStatus !== 'draft' && m.planStatus !== 'no-tug') return m
+            const r = m.required || {}
+            const needed = (m.operation === 'berth' ? r.tugsIn : r.tugsOut) || 0
+            const sizeHint = (r.tugSize || '').toLowerCase()
+            const readyOfSize = bkkTugs.filter(tg => {
+              const st = readiness[tg.code]?.status
+              if (st !== 'ready') return false
+              if (!sizeHint) return true
+              return (tg.groupName || '').toLowerCase().includes(sizeHint)
+            }).length
+            const hasEnough = needed === 0 || readyOfSize >= needed
+            return {
+              ...m,
+              planStatus: hasEnough ? 'fleet-confirmed' : 'no-tug',
+              fleetConfirmStatus: hasEnough ? 'confirmed' : 'no-tug',
+            }
+          })
+          set({ bangkokSchedule: confirmed })
+        },
+
+        postBangkokSchedule: () => {
+          const now = new Date().toISOString()
+          set(s => ({
+            bangkokSchedule: s.bangkokSchedule.map(m =>
+              m.planStatus === 'fleet-confirmed'
+                ? { ...m, planStatus: 'published', postedAt: now }
+                : m
+            ),
+          }))
+        },
+
+        getBangkokOverlaps: () => {
+          const { bangkokSchedule, bangkokAllocations } = get()
+          const tugMovements = {}
+          bangkokSchedule.forEach(m => {
+            const a = bangkokAllocations[m.id]
+            if (!a) return
+            const win = movementWindow(m)
+            if (!win) return
+            const codes = [
+              ...(a.tugCodes || []).map(c => ({ code: c, role: 'main' })),
+              ...(a.standbyCode ? [{ code: a.standbyCode, role: 'standby' }] : []),
+              ...(a.pilotBoat ? [{ code: a.pilotBoat, role: 'pilot' }] : []),
+              ...(a.ropeBoat ? [{ code: a.ropeBoat, role: 'rope' }] : []),
+            ]
+            codes.forEach(({ code, role }) => {
+              if (!tugMovements[code]) tugMovements[code] = []
+              tugMovements[code].push({ movementId: m.id, vesselName: m.vesselName, window: win, role, scheduledTime: m.scheduledTime })
+            })
+          })
+          const overlaps = {}
+          const movementOverlaps = {}
+          Object.entries(tugMovements).forEach(([code, list]) => {
+            for (let i = 0; i < list.length; i++) {
+              for (let j = i + 1; j < list.length; j++) {
+                if (windowsOverlap(list[i].window, list[j].window)) {
+                  if (!overlaps[code]) overlaps[code] = []
+                  overlaps[code].push({ a: list[i], b: list[j] })
+                  if (!movementOverlaps[list[i].movementId]) movementOverlaps[list[i].movementId] = new Set()
+                  if (!movementOverlaps[list[j].movementId]) movementOverlaps[list[j].movementId] = new Set()
+                  movementOverlaps[list[i].movementId].add(code)
+                  movementOverlaps[list[j].movementId].add(code)
+                }
+              }
+            }
+          })
+          return { byTug: overlaps, byMovement: movementOverlaps }
+        },
+
         // Reset demo
         resetDemo: () => {
           const s = seedState()
@@ -400,6 +572,8 @@ export const useStore = create(
           shift: s.shift,
           captainSession: s.captainSession,
           crewSession: s.crewSession,
+          bangkokSchedule: s.bangkokSchedule,
+          bangkokAllocations: s.bangkokAllocations,
         }),
       }
     )

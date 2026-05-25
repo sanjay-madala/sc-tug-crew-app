@@ -1,0 +1,55 @@
+{
+  "port": "Bangkok Port (Klong Toei)",
+  "source": "MOD(TUGBKK) — Marine Department",
+  "terminals": [
+    { "code": "KT-W1", "name": "Klong Toei Wharf 1", "berthType": "wharf" },
+    { "code": "KT-W2", "name": "Klong Toei Wharf 2", "berthType": "wharf" },
+    { "code": "KT-W3", "name": "Klong Toei Wharf 3", "berthType": "wharf" },
+    { "code": "KT-W4A", "name": "Klong Toei Wharf 4A", "berthType": "wharf" },
+    { "code": "KT-W4B", "name": "Klong Toei Wharf 4B", "berthType": "wharf" },
+    { "code": "KT-D1", "name": "Mid-River Dolphin 1", "berthType": "dolphin" },
+    { "code": "KT-D2", "name": "Mid-River Dolphin 2", "berthType": "dolphin" },
+    { "code": "KT-D3", "name": "Mid-River Dolphin 3", "berthType": "dolphin" },
+    { "code": "KT-B1", "name": "Buoy Mooring 1 (Sathupradit)", "berthType": "buoy" },
+    { "code": "KT-B2", "name": "Buoy Mooring 2 (Yannawa)", "berthType": "buoy" },
+    { "code": "KT-A1", "name": "Anchorage Area A (Bar Channel)", "berthType": "anchor" },
+    { "code": "KT-A2", "name": "Anchorage Area B (Outer Bar)", "berthType": "anchor" }
+  ],
+  "vessels": [
+    { "name": "MV Bangkok Star", "flag": "TH", "imo": "9301122", "grt": 8500, "loa": 128 },
+    { "name": "MV Chao Phraya Express", "flag": "TH", "imo": "9412233", "grt": 6200, "loa": 110 },
+    { "name": "MV Siam Trader", "flag": "TH", "imo": "9523344", "grt": 11200, "loa": 142 },
+    { "name": "MV Golden Mekong", "flag": "TH", "imo": "9634455", "grt": 4800, "loa": 95 },
+    { "name": "MV Ayutthaya Pearl", "flag": "TH", "imo": "9745566", "grt": 7300, "loa": 118 },
+    { "name": "MV Pacific Voyager", "flag": "PA", "imo": "9856677", "grt": 15400, "loa": 165 },
+    { "name": "MV Singapore Bridge", "flag": "SG", "imo": "9967788", "grt": 18900, "loa": 172 },
+    { "name": "MV Tokyo Maru", "flag": "JP", "imo": "9178899", "grt": 22500, "loa": 180 },
+    { "name": "MV Andaman Carrier", "flag": "TH", "imo": "9289900", "grt": 3600, "loa": 88 },
+    { "name": "MV Gulf Pioneer", "flag": "LR", "imo": "9390011", "grt": 9800, "loa": 135 }
+  ],
+  "agents": [
+    { "name": "Thai Shipping Agency Co., Ltd.", "tel": "02-249-1100" },
+    { "name": "Bangkok Maritime Services", "tel": "02-672-3344" },
+    { "name": "Chao Phraya Agency", "tel": "02-291-5566" },
+    { "name": "Siam Port Agency Ltd.", "tel": "02-238-7700" },
+    { "name": "Eastern Marine Agency", "tel": "02-249-8800" }
+  ],
+  "pilots": [
+    "Capt. Somchai Pradit",
+    "Capt. Niran Saengthong",
+    "Capt. Prawit Chaiyo",
+    "Capt. Anuwat Boonmee",
+    "Capt. Wirat Suksawat"
+  ],
+  "berthTypes": [
+    { "code": "wharf", "en": "Wharf Berth", "th": "ท่าเทียบเรือ" },
+    { "code": "dolphin", "en": "Mid-River Dolphin", "th": "หลักกลางน้ำ" },
+    { "code": "buoy", "en": "Buoy Mooring", "th": "ทุ่นผูกเรือ" },
+    { "code": "anchor", "en": "Anchorage", "th": "ทอดสมอ" }
+  ],
+  "tugSizes": [
+    { "code": "Large", "en": "Large Tug", "minHp": 2000 },
+    { "code": "Middle", "en": "Middle Tug", "minHp": 1200 },
+    { "code": "Small", "en": "Small Tug", "minHp": 350 }
+  ]
+}

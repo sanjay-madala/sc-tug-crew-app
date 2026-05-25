@@ -6,6 +6,7 @@ import './styles.css'
 import Landing from './pages/Landing'
 import DispatcherLayout from './layout/DispatcherLayout'
 import VesselSchedulePlanner from './pages/dispatcher/VesselSchedulePlanner'
+import BangkokVesselSchedulePlanner from './pages/dispatcher/BangkokVesselSchedulePlanner'
 import TugReadinessLog from './pages/dispatcher/TugReadinessLog'
 import TugShiftPlanner from './pages/dispatcher/TugShiftPlanner'
 import CrewAssignment from './pages/dispatcher/CrewAssignment'
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/dispatcher" element={<DispatcherLayout />}>
           <Route index element={<Navigate to="schedule" replace />} />
           <Route path="schedule" element={<VesselSchedulePlanner />} />
+          <Route path="bangkok" element={<BangkokVesselSchedulePlanner />} />
           <Route path="readiness" element={<TugReadinessLog />} />
           <Route path="shift" element={<TugShiftPlanner />} />
           <Route path="crew" element={<CrewAssignment />} />
